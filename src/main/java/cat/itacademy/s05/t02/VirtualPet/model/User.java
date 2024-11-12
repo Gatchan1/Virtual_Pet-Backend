@@ -25,6 +25,7 @@ public class User implements UserDetails {
     private String email;
     private String hashedPassword;
     private Role role;
+    private List<Pet> pets;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
