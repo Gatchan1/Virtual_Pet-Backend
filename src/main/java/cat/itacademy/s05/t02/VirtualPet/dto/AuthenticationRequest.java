@@ -1,4 +1,4 @@
-package cat.itacademy.s05.t02.VirtualPet.model.dto;
+package cat.itacademy.s05.t02.VirtualPet.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
