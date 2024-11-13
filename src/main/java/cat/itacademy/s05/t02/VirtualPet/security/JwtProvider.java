@@ -1,5 +1,6 @@
 package cat.itacademy.s05.t02.VirtualPet.security;
 
+import cat.itacademy.s05.t02.VirtualPet.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -45,14 +46,15 @@ public class JwtProvider {
                 .getPayload();
     }
 
-    public String generateToken(UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream()
+    public String generateToken(User user) {
+        String role = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("User has no authorities"));
 
         return Jwts.builder()
-                .subject(userDetails.getUsername())
+                .subject(user.getUsername())
+                .claim("id", user.getId())
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
