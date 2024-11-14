@@ -16,10 +16,13 @@ import cat.itacademy.s05.t02.VirtualPet.repository.UserRepository;
 import cat.itacademy.s05.t02.VirtualPet.service.PetService;
 import cat.itacademy.s05.t02.VirtualPet.util.EnumUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,6 +30,22 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
     private final UserRepository userRepository;
+
+    private void updateAllPets(Consumer<Pet> petAction) {
+        List<User> users = userRepository.findAll();
+        users.forEach(user -> user.getPets().forEach(petAction));
+        userRepository.saveAll(users);
+    }
+
+    @Scheduled(fixedRate = 30000) // 3600000 = 1 hour    //TODO change back to 3600000
+    private void scheduledPetsBehaviourUpdate() {
+        updateAllPets(Pet::hourlyBehaviourUpdate);
+    }
+
+    @Scheduled(fixedRate = 720000) // 720000 = 12 minutes //TODO delete this method
+    private void scheduledPetsSleep() {
+        updateAllPets(pet -> pet.setAsleep(!pet.isAsleep()));
+    }
 
     @Override
     public Pet createPet(PetCreateRequest petCreateRequest) {
@@ -54,7 +73,6 @@ public class PetServiceImpl implements PetService {
                 .energy(60)
                 .accessories(new HashSet<>())
                 .location(Location.COUNTRYSIDE)
-                .lastUpdated(LocalDateTime.now())
                 .build();
         newPet.setAccessoryPreferences(generateAccessoryPreferences());
         newPet.setLocationPreferences(generateLocationPreferences());
