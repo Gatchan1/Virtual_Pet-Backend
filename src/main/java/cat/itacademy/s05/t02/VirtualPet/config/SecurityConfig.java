@@ -27,20 +27,16 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userService);
+        provider.setPasswordEncoder(passwordEncoder());
+
         http.csrf(AbstractHttpConfigurer::disable) // Here we disable CSRF. (If we don't authenticate through cookies then it makes no sense to keep it enabled)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/**",
@@ -48,11 +44,11 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/webjars/**").permitAll()
-                        .requestMatchers("/user/admin/**").hasRole(Role.ADMIN.name())
-                        .requestMatchers("/user/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                        .requestMatchers("/pet/admin/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers("/pet/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .anyRequest().denyAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(provider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

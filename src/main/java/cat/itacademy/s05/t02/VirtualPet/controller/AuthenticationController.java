@@ -23,8 +23,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> register(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
         String jwtToken = authService.authenticate(authenticationRequest);
         return ResponseEntity.ok(jwtToken);
     }
+
+    //crear ruta de logout!!
 }

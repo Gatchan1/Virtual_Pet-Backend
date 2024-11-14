@@ -1,5 +1,8 @@
 package cat.itacademy.s05.t02.VirtualPet.model;
 
+import cat.itacademy.s05.t02.VirtualPet.enums.Accessory;
+import cat.itacademy.s05.t02.VirtualPet.enums.Location;
+import cat.itacademy.s05.t02.VirtualPet.enums.PetInteraction;
 import cat.itacademy.s05.t02.VirtualPet.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Builder
@@ -25,7 +27,28 @@ public class User implements UserDetails {
     private String email;
     private String hashedPassword;
     private Role role;
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
+
+    public Optional<Pet> retrievePetByName(String petName) {
+        return pets.stream()
+                .filter(pet -> pet.getName().equalsIgnoreCase(petName))
+                .findFirst();
+    }
+
+    public void changePetAccessories(String petName, Set<Accessory> accessories) {
+        Pet pet = retrievePetByName(petName).get(); // checked not null in PetService method updatePet
+        pet.changeAccessories(accessories);
+    }
+
+    public void changePetLocation(String petName, Location location) {
+        Pet pet = retrievePetByName(petName).get(); // checked not null in PetService method updatePet
+        pet.changeLocation(location);
+    }
+
+    public void interactWithPet(String petName, PetInteraction interaction) {
+        Pet pet = retrievePetByName(petName).get(); // checked not null in PetService method updatePet
+        pet.interact(interaction);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
