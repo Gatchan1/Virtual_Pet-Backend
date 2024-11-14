@@ -53,6 +53,7 @@ public class PetServiceImpl implements PetService {
                 .happiness(40)
                 .energy(60)
                 .accessories(new HashSet<>())
+                .location(Location.COUNTRYSIDE)
                 .lastUpdated(LocalDateTime.now())
                 .build();
         newPet.setAccessoryPreferences(generateAccessoryPreferences());
@@ -135,8 +136,7 @@ public class PetServiceImpl implements PetService {
         } else user.interactWithPet(petName, petInteraction);
 
         userRepository.save(user);
-        return foundPet;                //TODO comprobar que retorna la mascota updateada
+        return foundPet;
     }
-
 
 }

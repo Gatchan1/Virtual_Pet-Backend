@@ -53,9 +53,9 @@ public class Pet {
 
     public void interact(PetInteraction interaction) {
         if (interaction == PetInteraction.EAT) {
-            energy += 10;
+            energy += 15;
         } else if (interaction == PetInteraction.PLAY) {
-            happiness += 10;
+            happiness += 15;
             energy -= 5;
         }
         wakeUp();
