@@ -3,8 +3,10 @@ package cat.itacademy.s05.t02.VirtualPet.controller;
 import cat.itacademy.s05.t02.VirtualPet.dto.PetCreateRequest;
 import cat.itacademy.s05.t02.VirtualPet.dto.PetFindRequest;
 import cat.itacademy.s05.t02.VirtualPet.dto.PetUpdateRequest;
+import cat.itacademy.s05.t02.VirtualPet.dto.PetWithUserInfo;
 import cat.itacademy.s05.t02.VirtualPet.model.Pet;
 import cat.itacademy.s05.t02.VirtualPet.service.impl.PetServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ public class PetController {
     private final PetServiceImpl petService;
 
     @PostMapping("/create")
-    public ResponseEntity<Pet> createPet(@RequestBody PetCreateRequest petCreateRequest) {
+    public ResponseEntity<Pet> createPet(@RequestBody @Valid PetCreateRequest petCreateRequest) {
         return new ResponseEntity<>(petService.createPet(petCreateRequest), HttpStatus.CREATED);
     }
 
@@ -41,7 +43,7 @@ public class PetController {
     }
 
     @GetMapping("/admin/getAll")
-    public ResponseEntity<List<Pet>> getAllPets() {
+    public ResponseEntity<List<PetWithUserInfo>> getAllPets() {
         return ResponseEntity.ok(petService.getAllPets());
     }
 

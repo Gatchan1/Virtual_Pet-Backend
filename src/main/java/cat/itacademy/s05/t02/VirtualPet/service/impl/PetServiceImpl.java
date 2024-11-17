@@ -3,6 +3,7 @@ package cat.itacademy.s05.t02.VirtualPet.service.impl;
 import cat.itacademy.s05.t02.VirtualPet.dto.PetCreateRequest;
 import cat.itacademy.s05.t02.VirtualPet.dto.PetFindRequest;
 import cat.itacademy.s05.t02.VirtualPet.dto.PetUpdateRequest;
+import cat.itacademy.s05.t02.VirtualPet.dto.PetWithUserInfo;
 import cat.itacademy.s05.t02.VirtualPet.enums.Accessory;
 import cat.itacademy.s05.t02.VirtualPet.enums.Location;
 import cat.itacademy.s05.t02.VirtualPet.enums.PetInteraction;
@@ -35,7 +36,7 @@ public class PetServiceImpl implements PetService {
         userRepository.saveAll(users);
     }
 
-    @Scheduled(fixedRate = 30000) // 3600000 = 1 hour    //TODO change back to 3600000
+    @Scheduled(fixedRate = 60000) // 3600000 = 1 hour    //TODO change back to 3600000
     private void scheduledPetsBehaviourUpdate() {
         updateAllPets(Pet::hourlyBehaviourUpdate);
     }
@@ -123,11 +124,25 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public List<Pet> getAllPets() {
+    public List<PetWithUserInfo> getAllPets() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .flatMap(user -> user.getPets().stream())
-                .toList();
+                .flatMap(user -> user.getPets().stream()
+                        .map(pet -> PetWithUserInfo.builder()
+                                .userId(user.getId())
+                                .userName(user.getUsername())
+                                .type(pet.getType())
+                                .name(pet.getName())
+                                .color(pet.getColor())
+                                .accessoryPreferences(pet.getAccessoryPreferences())
+                                .locationPreferences(pet.getLocationPreferences())
+                                .happiness(pet.getHappiness())
+                                .energy(pet.getEnergy())
+                                .isAsleep(pet.isAsleep())
+                                .accessories(pet.getAccessories())
+                                .location(pet.getLocation())
+                                .build()))
+                .collect(Collectors.toList());
     }
 
     @Override
