@@ -26,33 +26,37 @@ public class Pet {
     private Location location;
 
     public void changeAccessories(Set<Accessory> newAccessories) {
-        if (accessories.size() > newAccessories.size()) { //removed accessory
-            Accessory addedAccessory = accessories.stream()
-                    .filter(accessory -> !newAccessories.contains(accessory))
-                    .findFirst().get();
-            int happinessAdjustment = accessoryPreferences.get(addedAccessory).getHappinessAdjustment();
-            if (happinessAdjustment > 0) increaseValue(happinessAdjustment, this::setHappiness, this::getHappiness);
-            else decreaseValue(happinessAdjustment, this::setHappiness, this::getHappiness);
-
-        } else if (accessories.size() < newAccessories.size()) { //added accessory
-            Accessory removedAccessory = newAccessories.stream()
-                    .filter(accessory -> !accessories.contains(accessory))
-                    .findFirst().get();
-            int happinessAdjustment = accessoryPreferences.get(removedAccessory).getHappinessAdjustment();
-            if (happinessAdjustment > 0) decreaseValue(happinessAdjustment, this::setHappiness, this::getHappiness);
-            else increaseValue(happinessAdjustment, this::setHappiness, this::getHappiness);
-        }
+        accessories.stream()
+                .filter(accessory -> !newAccessories.contains(accessory))
+                .findFirst()
+                .ifPresent(removedAccessory ->
+                        adjustHappiness(-accessoryPreferences.get(removedAccessory).getHappinessAdjustment())
+                );
+        newAccessories.stream()
+                .filter(accessory -> !accessories.contains(accessory))
+                .findFirst()
+                .ifPresent(addedAccessory ->
+                        adjustHappiness(accessoryPreferences.get(addedAccessory).getHappinessAdjustment())
+                );
         setAccessories(newAccessories);
         wakeUp();
     }
 
     public void changeLocation(Location newLocation) {
         if (!location.equals(newLocation)) {
-            happiness -= locationPreferences.get(location).getHappinessAdjustment();
-            happiness += locationPreferences.get(newLocation).getHappinessAdjustment();
+            adjustHappiness(-locationPreferences.get(location).getHappinessAdjustment());
+            adjustHappiness(locationPreferences.get(newLocation).getHappinessAdjustment());
             setLocation(newLocation);
         }
         wakeUp();
+    }
+
+    private void adjustHappiness(int adjustment) {
+        if (adjustment > 0) {
+            increaseValue(adjustment, this::setHappiness, this::getHappiness);
+        } else {
+            decreaseValue(Math.abs(adjustment), this::setHappiness, this::getHappiness);
+        }
     }
 
     public void interact(PetInteraction interaction) {
