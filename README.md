@@ -1,5 +1,5 @@
 Hi there!
-This is a fullstack project, here is the frontend repo (built with React): https://github.com/Gatchan1/Virtual_Pet-Frontend
+This is a full stack project, here is the frontend repo (built with React): https://github.com/Gatchan1/Virtual_Pet-Frontend
 
 This backend is built using Spring Web MVC and it's main learning goal was the **authentication** with role based authorization.
 The database used is **MongoDB**.
@@ -16,4 +16,4 @@ When a pet is created, it comes with a "unique" personality: random preferences 
 Also their level of happiness and energy decreases automatically as time passes by, but when sleeping they regain energy.
 
 <br>
-This was one of the two final projects made for my Java & Spring Framework bootcamp (@It Academy, Barcelona, 2024). I had a lot of fun building it! ✨
+This was one of the two final projects made for my Java & Spring Framework bootcamp (@It Academy, Barcelona, 2024).\ I had a lot of fun building it! ✨
