@@ -11,7 +11,7 @@ which they'll have to take care of through feeding and playing with them, and al
 This is how the frontend looks, when you check in a specific pet.
 
 This would be the database schema diagram I built:
-![virtual_pet-mongo_diagram](https://github.com/user-attachments/assets/ed79d911-794d-4f9b-82a9-468dbac42a6d | width=600)
+<img src="https://github.com/user-attachments/assets/ed79d911-794d-4f9b-82a9-468dbac42a6d" alt="virtual_pet-mongo_diagram" width="600">
 When a pet is created, it comes with a "unique" personality: random preferences regarding accessories and locations.
 Also their level of happiness and energy decreases automatically as time passes by, but when sleeping they regain energy.
 
