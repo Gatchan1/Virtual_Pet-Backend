@@ -15,5 +15,7 @@ This would be the database schema diagram I built:\
 When a pet is created, it comes with a "unique" personality: random preferences regarding accessories and locations.
 Also their level of happiness and energy decreases automatically as time passes by, but when sleeping they regain energy.
 
-<br>
-This was one of the two final projects made for my Java & Spring Framework bootcamp (@It Academy, Barcelona, 2024).\ I had a lot of fun building it! ✨
+---
+\
+This was one of the two final projects made for my Java & Spring Framework bootcamp (@It Academy, Barcelona, 2024).  \
+I had a lot of fun building it! ✨
