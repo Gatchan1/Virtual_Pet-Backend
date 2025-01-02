@@ -144,6 +144,8 @@ public class PetServiceImpl implements PetService {
                                 .isAsleep(pet.isAsleep())
                                 .accessories(pet.getAccessories())
                                 .location(pet.getLocation())
+                                .isActive(pet.isActive())
+                                .createdAt(pet.getCreatedAt())
                                 .build()))
                 .toList();
     }

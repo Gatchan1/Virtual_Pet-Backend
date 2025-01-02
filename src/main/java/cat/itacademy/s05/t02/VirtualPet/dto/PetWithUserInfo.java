@@ -3,6 +3,7 @@ package cat.itacademy.s05.t02.VirtualPet.dto;
 import cat.itacademy.s05.t02.VirtualPet.enums.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,4 +24,6 @@ public class PetWithUserInfo {
     private boolean isAsleep;
     private Set<Accessory> accessories;
     private Location location;
+    private boolean isActive;
+    private LocalDateTime createdAt;
 }
