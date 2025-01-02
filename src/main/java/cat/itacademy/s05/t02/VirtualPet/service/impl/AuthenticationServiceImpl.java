@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        log.info("User {} successfully logged in", user.getUsername());
+        log.info("User {} successfully registered", user.getUsername());
         return jwtProvider.generateToken(user);
     }
 
@@ -53,7 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUserName(), authenticationRequest.getPassword()
         ));
-        log.info("User {} successfully registered", user.getUsername());
+        log.info("User {} successfully logged in", user.getUsername());
         return jwtProvider.generateToken(user);
     }
 }
