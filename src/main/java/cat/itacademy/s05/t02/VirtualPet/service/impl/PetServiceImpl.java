@@ -8,6 +8,7 @@ import cat.itacademy.s05.t02.VirtualPet.enums.Accessory;
 import cat.itacademy.s05.t02.VirtualPet.enums.Location;
 import cat.itacademy.s05.t02.VirtualPet.enums.PetInteraction;
 import cat.itacademy.s05.t02.VirtualPet.enums.TasteLevel;
+import cat.itacademy.s05.t02.VirtualPet.exception.custom.PetIsInactiveException;
 import cat.itacademy.s05.t02.VirtualPet.exception.custom.PetNameAlreadyExistsException;
 import cat.itacademy.s05.t02.VirtualPet.exception.custom.PetNameNotFoundException;
 import cat.itacademy.s05.t02.VirtualPet.exception.custom.UserNotFoundException;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -28,22 +30,21 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
+    private static final int INITIAL_HAPPINESS = 40;
+    private static final int INITIAL_ENERGY = 60;
+    private static final int UPDATE_RATE = 60000; //3600000
+
     private final UserRepository userRepository;
+
+    @Scheduled(fixedRate = UPDATE_RATE)
+    private void scheduledPetsBehaviourUpdate() {
+        updateAllPets(Pet::hourlyBehaviourUpdate);
+    }
 
     private void updateAllPets(Consumer<Pet> petAction) {
         List<User> users = userRepository.findAll();
         users.forEach(user -> user.getPets().forEach(petAction));
         userRepository.saveAll(users);
-    }
-
-    @Scheduled(fixedRate = 60000) // 3600000 = 1 hour    //TODO change back to 3600000
-    private void scheduledPetsBehaviourUpdate() {
-        updateAllPets(Pet::hourlyBehaviourUpdate);
-    }
-
-    @Scheduled(fixedRate = 720000) // 720000 = 12 minutes //TODO delete this method
-    private void scheduledPetsSleep() {
-        updateAllPets(pet -> pet.setAsleep(!pet.isAsleep()));
     }
 
     @Override
@@ -68,10 +69,12 @@ public class PetServiceImpl implements PetService {
                 .name(petCreateRequest.getName())
                 .type(petCreateRequest.getType())
                 .color(petCreateRequest.getColor())
-                .happiness(40)
-                .energy(60)
+                .happiness(INITIAL_HAPPINESS)
+                .energy(INITIAL_ENERGY)
                 .accessories(new HashSet<>())
                 .location(Location.COUNTRYSIDE)
+                .isActive(true)
+                .createdAt(LocalDateTime.now())
                 .build();
         newPet.setAccessoryPreferences(generateAccessoryPreferences());
         newPet.setLocationPreferences(generateLocationPreferences());
@@ -142,7 +145,7 @@ public class PetServiceImpl implements PetService {
                                 .accessories(pet.getAccessories())
                                 .location(pet.getLocation())
                                 .build()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -159,6 +162,9 @@ public class PetServiceImpl implements PetService {
         Pet foundPet = user.retrievePetByName(petName)
                 .orElseThrow(() -> new PetNameNotFoundException("User with id " + userId
                         + " doesn't have a pet named " + petName));
+
+        if (!foundPet.isActive()) throw new PetIsInactiveException("Pet named " + petName
+                + " is inactive and therefore can't be updated");
 
         if (!newAccessories.equals(foundPet.getAccessories())) {
             user.changePetAccessories(petName, newAccessories);

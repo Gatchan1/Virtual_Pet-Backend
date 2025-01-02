@@ -24,6 +24,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(e, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PetIsInactiveException.class)
+    public ResponseEntity<ErrorResponse> handlePetIsInactiveException(PetIsInactiveException e) {
+        return buildErrorResponse(e, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
         return buildErrorResponse(e, HttpStatus.CONFLICT);

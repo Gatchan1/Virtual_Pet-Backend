@@ -24,6 +24,8 @@ public class Pet {
     private boolean isAsleep;
     private Set<Accessory> accessories;
     private Location location;
+    private boolean isActive;
+    private LocalDateTime createdAt;
 
     public void changeAccessories(Set<Accessory> newAccessories) {
         accessories.stream()
@@ -78,9 +80,17 @@ public class Pet {
         if (currentHour >= 22 || currentHour < 10) {
             isAsleep = true;
         } else isAsleep = (happiness > 0 && energy < 20);
+        // When happiness equals 0 the pet has trouble sleeping.
+    }
+
+    public void checkIfActive() {
+        if (happiness == 0 && energy == 0) isActive = false;
     }
 
     public void hourlyBehaviourUpdate() {
+        if (!isActive) {
+          return;
+        }
         checkIfSleeping();
         if (isAsleep) {
             increaseValue(5, this::setEnergy, this::getEnergy);
@@ -94,10 +104,12 @@ public class Pet {
     private void increaseValue(int value, Consumer<Integer> setter, Supplier<Integer> getter) {
         int newValue = Math.min(getter.get() + value, 100); // Increase up to 100
         setter.accept(newValue);
+        checkIfActive();
     }
 
     private void decreaseValue(int value, Consumer<Integer> setter, Supplier<Integer> getter) {
         int newValue = Math.max(getter.get() - value, 0); // Decrease down to 0
         setter.accept(newValue);
+        checkIfActive();
     }
 }
