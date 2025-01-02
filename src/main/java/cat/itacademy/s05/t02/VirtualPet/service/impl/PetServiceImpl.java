@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 public class PetServiceImpl implements PetService {
     private static final int INITIAL_HAPPINESS = 40;
     private static final int INITIAL_ENERGY = 60;
-    private static final int UPDATE_RATE = 60000; //3600000
+    private static final int UPDATE_RATE = 3600000;
 
     private final UserRepository userRepository;
 
