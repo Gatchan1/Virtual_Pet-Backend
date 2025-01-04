@@ -25,6 +25,8 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private static final String FRONTEND_URL = "https://virtual-pet-frontend-eight.vercel.app"; //"http://localhost:5173";
+
     private final UserServiceImpl userService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -42,7 +44,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable) // Here we disable CSRF. (If we don't authenticate through cookies then it makes no sense to keep it enabled)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:5173"));
+                    config.setAllowedOrigins(List.of(FRONTEND_URL));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
                     config.setAllowCredentials(true);
