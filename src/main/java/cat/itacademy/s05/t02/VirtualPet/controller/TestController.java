@@ -3,7 +3,7 @@ package cat.itacademy.s05.t02.VirtualPet.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@RestController                                //This file can be deleted
 @RequestMapping("/test")
 public class TestController {
     @GetMapping("/")

@@ -146,6 +146,7 @@ public class PetServiceImpl implements PetService {
                                 .location(pet.getLocation())
                                 .isActive(pet.isActive())
                                 .createdAt(pet.getCreatedAt())
+                                .inactivatedAt(pet.getInactivatedAt())
                                 .build()))
                 .toList();
     }

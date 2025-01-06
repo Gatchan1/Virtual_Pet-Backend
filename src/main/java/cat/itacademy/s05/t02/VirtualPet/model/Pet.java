@@ -26,6 +26,7 @@ public class Pet {
     private Location location;
     private boolean isActive;
     private LocalDateTime createdAt;
+    private LocalDateTime inactivatedAt;
 
     public void changeAccessories(Set<Accessory> newAccessories) {
         accessories.stream()
@@ -84,7 +85,11 @@ public class Pet {
     }
 
     public void checkIfActive() {
-        if (happiness == 0 && energy == 0) isActive = false;
+        if (!isActive) return;
+        if (happiness == 0 && energy == 0) {
+            isActive = false;
+            inactivatedAt = LocalDateTime.now();
+        }
     }
 
     public void hourlyBehaviourUpdate() {

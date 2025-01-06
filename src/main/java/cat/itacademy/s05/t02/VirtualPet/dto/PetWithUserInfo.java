@@ -26,4 +26,5 @@ public class PetWithUserInfo {
     private Location location;
     private boolean isActive;
     private LocalDateTime createdAt;
+    private LocalDateTime inactivatedAt;
 }
