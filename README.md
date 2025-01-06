@@ -1,11 +1,13 @@
 Hi there!
-This is a full stack project, here is the frontend repo (built with React): https://github.com/Gatchan1/Virtual_Pet-Frontend
-
+This is a full stack project, here is the frontend repo (built with React): https://github.com/Gatchan1/Virtual_Pet-Frontend 
+### Frontend deploy: https://virtual-pet-frontend-eight.vercel.app/
+\
 This backend is built using Spring Web MVC and it's main learning goal was the **authentication** with role based authorization.
 The database used is **MongoDB**.
 
-The idea of the app is that the user would create a user account, and once logged in they can create their own **virtual pets**, 
-which they'll have to take care of through feeding and playing with them, and also one can change the pet's accessories and/or change to a different location.
+What is this app about: The user would create a user account, and once logged in they can create their own **virtual pets**, 
+which they'll have to take care of through feeding and playing with them, and also one can change the pet's accessories and/or 
+switch to a different location.
 
 ![Captura de pantalla 2024-12-10 203802](https://github.com/user-attachments/assets/230641cf-50e9-40ba-bd98-859db7fafc35)
 This is how the frontend looks, when you check in a specific pet.
