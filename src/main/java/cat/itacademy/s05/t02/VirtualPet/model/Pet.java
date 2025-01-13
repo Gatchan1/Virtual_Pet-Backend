@@ -78,10 +78,12 @@ public class Pet {
 
     public void checkIfSleeping() {
         int currentHour = LocalDateTime.now().getHour();
-        if (currentHour >= 22 || currentHour < 10) {
-            isAsleep = true;
-        } else isAsleep = (happiness > 0 && energy < 20);
-        // When happiness equals 0 the pet has trouble sleeping.
+        if (happiness > 0) {
+            if (currentHour >= 22 || currentHour < 10) {
+                isAsleep = true;
+            } else isAsleep = (energy < 20);
+        } else isAsleep = false;
+        // When happiness equals 0 the pet has insomnia.
     }
 
     public void checkIfActive() {
