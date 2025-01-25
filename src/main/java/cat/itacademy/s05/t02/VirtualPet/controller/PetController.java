@@ -47,7 +47,7 @@ public class PetController {
         return ResponseEntity.ok(petService.getAllPets());
     }
 
-    @PutMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<Pet> updatePet(@RequestBody PetUpdateRequest petUpdateRequest) {
         return ResponseEntity.ok(petService.updatePet(petUpdateRequest));
     }
